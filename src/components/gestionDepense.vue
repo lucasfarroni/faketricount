@@ -12,20 +12,22 @@
       <input type="date" v-model="newExpense.date" id="date" required />
       <br />
       <label for="user">Utilisateur :</label>
-      <select v-model="selectedUser">
-        <option v-for="user in users.membres" :value="user">{{ user }}</option>
+      <select v-model="newExpense.user">
+        <option v-for="user in getAccountInLocalStorage.membres" :value="user.name" :key="user">{{ user.name }}</option>
       </select>
+
       <br />
       <button @click.prevent="addExpense">Ajouter dépense</button>
     </form>
     <ul>
-      <li v-for="(expense, index) in expenses" :key="expense.name+index+expense.date">
+      <li v-for="(expense, index) in getAccountInLocalStorage.accounts" :key="expense.name+index+expense.date">
         {{ expense.name }} - {{ expense.amount }} - {{ expense.date }} - Ajouté par {{ expense.user }}
       </li>
     </ul>
   </div>
   <div>
     LABEL : {{ label }}
+    accounts : {{ getAccountInLocalStorage}}
   </div>
 </template>
 
@@ -33,8 +35,7 @@
 export default {
   data() {
     return {
-      expenses: JSON.parse(localStorage.getItem('CPS')) || [],
-      users: JSON.parse(localStorage.getItem('CPS')) || [],
+      accounts: JSON.parse(localStorage.getItem('CPS')) || [],
       selectedUser: '',
       newExpense: {
         name: '',
@@ -47,20 +48,23 @@ export default {
   computed:{
     label(){
       return this.$route.params.label
+    },
+      getAccountInLocalStorage(){
+
+        return this.accounts.find(account => account.label === this.label) || {};
+      }
     }
-  },
+  ,
   methods: {
     addExpense() {
-      // Ajouter l'utilisateur sélectionné à la nouvelle dépense
-      this.newExpense.user = this.selectedUser;
+      let account = this.getAccountInLocalStorage;
 
+      // Ajouter l'utilisateur sélectionné à la nouvelle dépense
+      account.accounts.push(this.newExpense);
       // Ajouter la nouvelle dépense à la liste
-      let newCPS = this.expenses;
-      newCPS.accounts.push(this.newExpense);
       //this.expenses.accounts.push(this.newExpense);
       // Enregistrer les dépenses dans le local storage
-      localStorage.setItem('CPS', JSON.stringify(newCPS));
-      this.expenses = newCPS;
+      localStorage.setItem('CPS', JSON.stringify(account));
       // Réinitialiser le formulaire
       this.newExpense = {
         name: '',
@@ -68,7 +72,6 @@ export default {
         date: '',
         user: ''
       };
-      this.selectedUser = '';
     }
   }
 }

@@ -34,7 +34,7 @@ export default {
     },
   },
   mounted() {
-    this.participants = JSON.parse(localStorage.getItem('sharedAccount')) || [];
+    this.participants = JSON.parse(localStorage.getItem('CPS')) || [];
     this.participants.forEach(participant => {
       const totalExpenses = participant.expenses.reduce((total, expense) => total + expense, 0);
       const avgExpenses = totalExpenses / this.participants.length;

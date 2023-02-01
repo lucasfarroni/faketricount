@@ -8,6 +8,7 @@ const routes = [
     { name: 'CreateCompte', path: '/CreateCompte', component: CreateCompte },
     { name : 'NotFound' , path : '/:pathMatch(.*)*', component: NotFound},
     { name : 'gestionMembreCompte' , path : '/gestionMembreCompte', component: gestionMembreCompte},
+    { name : 'gestionMembreCompte' , path : '/gestionMembreCompte/:label', component: gestionMembreCompte},
     { name : 'gestionDepense' , path : '/gestionDepense', component: gestionDepense},
     { name : 'gestionDepense' , path : '/gestionDepense/:label', component: gestionDepense},
     { name :  'BalanceDepense' , path : '/BalanceDepense', component: BalanceDepense},

@@ -13,11 +13,13 @@
       <button @click.prevent="createCP">Créer</button>
     </form>
 
-    <ul v-for="account in sharedAccount" :key="account.label+index">
+    <ul v-for="(account,index) in sharedAccount" :key="account.label+index">
       <li >nom : {{ account.label }}</li>
       <li>description : {{ account.description }}</li>
       <li>date : {{ account.date }}</li>
-      <RouterLink :to="`/gestionDepense/${account.label}`">{{ account.label }}</RouterLink>
+      <li><RouterLink :to="`/gestionDepense/${account.label}`">{{ account.label }} Gestion dep</RouterLink></li>
+      <li><RouterLink :to="`/gestionMembreCompte/${account.label}`">{{ account.label }} Gestion membre</RouterLink></li>
+      <li> <button @click="removeCP(index)">Supprimer</button></li>
     </ul>
   </div>
 </template>
@@ -45,16 +47,20 @@ export default {
       let CPS = JSON.parse(localStorage.getItem('CPS')) || [];
       CPS.push(this.newCP);
       localStorage.setItem('CPS', JSON.stringify(CPS));
-
-      // Mettre à jour le tableau "shareAccount"
+      // Mettre à jour le tableau "sharedAccount"
       this.sharedAccount = CPS;
-
       // Réinitialiser le formulaire
       this.newCP = {
         label: '',
         description: '',
         date: ''
       };
+    },
+    removeCP(index) {
+      let CPS = JSON.parse(localStorage.getItem('CPS'));
+      CPS.splice(index, 1);
+      localStorage.setItem('CPS', JSON.stringify(CPS));
+      this.sharedAccount = CPS;
     }
   }
 }
