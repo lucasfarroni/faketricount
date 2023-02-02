@@ -77,39 +77,35 @@ export default {
 </script>
 <style scoped>
 body {
-font-family: Arial, sans-serif;
+  font-family: Arial, sans-serif;
 }
-
 form {
-display: flex;
-flex-direction: column;
-align-items: center;
-padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
 }
-
 label {
-font-weight: bold;
-margin-bottom: 10px;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
-
 input[type="text"],
 textarea {
-width: 40%;
-padding: 10px;
-margin-bottom: 20px;
-border-radius: 5px;
-border: 1px solid #ccc;
-font-size: 14px;
+  width: 40%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
 }
-
 button {
-background-color: #4CAF50;
-color: white;
-padding: 6px 12px;
-border-radius: 5px;
-border: none;
-cursor: pointer;
-font-size: 14px;
+  background-color: #4CAF50;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
 }
 /*#allAccount{
   display: flex;
@@ -121,13 +117,11 @@ font-size: 14px;
   display: flex;
 }*/
 li {
-list-style: none;
-margin: 10px;
+  list-style: none;
+  margin: 10px;
 }
-
 a {
-color: #4CAF50;
-text-decoration: none;
+  color: #4CAF50;
+  text-decoration: none;
 }
-
 </style>

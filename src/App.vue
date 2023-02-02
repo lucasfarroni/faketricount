@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <h1>freeCount</h1>
-    <div id="routeLink">
+    <h1>fakeTricount</h1>
+
       <router-link to="/CreateCompte" id="crCompte">All Account</router-link>
-    </div>
+
     <router-view/>
   </div>
 </template>
@@ -28,10 +28,6 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-#routeLink {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+
 
 </style>

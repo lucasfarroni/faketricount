@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <form>
@@ -54,10 +53,10 @@ export default {
     /**
      * Récupère le compte dans le localStorage
      */
-      getAccountInLocalStorage(){
-        return this.accounts.find(account => account.label === this.label) || [];
-      }
+    getAccountInLocalStorage(){
+      return this.accounts.find(account => account.label === this.label) || [];
     }
+  }
   ,
   methods: {
     /**
@@ -65,7 +64,6 @@ export default {
      */
     addExpense() {
       let account = this.getAccountInLocalStorage;
-
       // Ajouter l'utilisateur sélectionné à la nouvelle dépense
       //account = tableau du localStorage .accounts = tableau des dépenses . push = ajouter un élément au tableau
       account.accounts.push(this.newExpense);
@@ -84,4 +82,3 @@ export default {
   }
 }
 </script>
-

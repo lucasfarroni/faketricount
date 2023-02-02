@@ -1,14 +1,20 @@
 <template>
   <div>
     <form>
-      <label for="name">Nom :</label>
-      <input type="text" v-model="newParticipant.name" id="name" placeholder="Entrez le nom du participant" required />
-      <br />
-      <label for="email">Email :</label>
-      <input type="email" v-model="newParticipant.email" id="email" placeholder="Entrez l'email du participant" required />
-      <br />
-      <button @click.prevent="addParticipant">Ajouter participant</button>
+      <label for="name">Nom </label>
+      <input type="text" v-model="newParticipant.name" id="name" placeholder="Entrez le nom du participant" required/>
+      <br/>
+      <label for="email">Email </label>
+      <input type="email" v-model="newParticipant.email" id="email" placeholder="Entrez l'email du participant"
+             required/>
+      <br/>
+      <button id="btnSupMembre" @click.prevent="addParticipant">Ajouter participant</button>
     </form>
+      <div id="accessToExpense" v-if= "getAccountInLocalStorage.membres.length > 0">
+        <RouterLink :to="`/gestionDepense/${getAccountInLocalStorage.label}`"> Acceder aux dépenses du compte :
+          {{ getAccountInLocalStorage.label }}
+        </RouterLink>
+      </div>
     <table class="table">
       <thead>
       <tr>
@@ -22,7 +28,7 @@
         <td>{{ participant.name }}</td>
         <td>{{ participant.email }}</td>
         <td>
-          <button class="btn btn-danger" @click="removeParticipant(index)">Supprimer</button>
+          <button id="btnSup" class="btn btn-danger" @click="removeParticipant(index) ">Supprimer</button>
         </td>
       </tr>
       </tbody>
@@ -34,7 +40,7 @@
 export default {
   data() {
     return {
-      accounts: JSON.parse(localStorage.getItem('CPS')) || [] ,
+      accounts: JSON.parse(localStorage.getItem('CPS')) || [],
       newParticipant: {
         name: '',
         email: ''
@@ -86,14 +92,14 @@ input[type="text"], input[type="email"] {
   width: 300px;
 }
 
-button[type="submit"] {
-  background-color: blue;
+#btnSupMembre {
+  background-color: #4CAF50;
   color: white;
-  padding: 10px 20px;
-  border: none;
+  padding: 6px 12px;
   border-radius: 5px;
-  font-size: 16px;
+  border: none;
   cursor: pointer;
+  font-size: 14px;
 }
 
 .table {
@@ -102,7 +108,7 @@ button[type="submit"] {
   text-align: center;
 }
 
-.btn-danger {
+#btnSup {
   background-color: #4CAF50;
   color: white;
   border: none;
@@ -110,5 +116,8 @@ button[type="submit"] {
   padding: 5px 10px;
   font-size: 16px;
   cursor: pointer;
+}
+#btnSup:hover {
+  background-color:#bb2d3b ;
 }
 </style>
