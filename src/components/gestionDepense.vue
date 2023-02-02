@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h2>Montant total dépensé par le groupe : {{ updateTotal}}</h2>
     <form>
       <label for="name">Nom :</label>
       <input type="text" v-model="newExpense.name" id="name" placeholder="Entrez le nom de la dépense" required />
@@ -18,15 +19,40 @@
       <br />
       <button @click.prevent="addExpense">Ajouter dépense</button>
     </form>
-    <ul>
-      <li v-for="(expense, index) in getAccountInLocalStorage.accounts" :key="expense.name+index+expense.date">
-        {{ expense.name }} - {{ expense.amount }} - {{ expense.date }} - Ajouté par {{ expense.user }}
-      </li>
-    </ul>
-  </div>
-  <div>
-    LABEL : {{ label }}
-    accounts : {{ getAccountInLocalStorage}}
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Montant</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(userBalance, index) in tableauOfUser" :key="userBalance.nameMember+ index">
+          <td>{{ userBalance.nameMember }}</td>
+          <td  :style="{color: updateTotal / getAccountInLocalStorage.membres.length > userBalance.totalAmount ? 'red' : 'green'}">{{ userBalance.totalAmount }}</td>
+        </tr>
+      </tbody>
+    </table>
+  <h2>historique</h2>
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col">Nom</th>
+        <th scope="col">Montant</th>
+        <th scope="col">Date</th>
+        <th scope="col">Ajouté par</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="(expense, index) in getAccountInLocalStorage.accounts" :key="expense.name+index+expense.date">
+        <td>{{ expense.name }}</td>
+        <td>{{ expense.amount }}</td>
+        <td>{{ expense.date }}</td>
+        <td>{{ expense.user }}</td>
+      </tr>
+      </tbody>
+    </table>
+
   </div>
 </template>
 
@@ -34,7 +60,13 @@
 export default {
   data() {
     return {
+      totalExpensesfriend: 0,
       accounts: JSON.parse(localStorage.getItem('CPS')) || [],
+      tableauOfAllUser: [],
+      CalculBalance: {
+        nameMember:'',
+        totalAmount:0,
+      },
       newExpense: {
         name: '',
         amount: '',
@@ -55,7 +87,32 @@ export default {
      */
     getAccountInLocalStorage(){
       return this.accounts.find(account => account.label === this.label) || [];
-    }
+    },
+    updateTotal(){
+      let account = this.getAccountInLocalStorage;
+      let total = this.getAccountInLocalStorage.total;
+      account.accounts.forEach(expense => {
+        total += expense.amount;
+      });
+      return total;
+    },
+    tableauOfUser(){
+      let tableauOfAllUser = [];
+      this.getAccountInLocalStorage.membres.forEach(membre => {
+            this.CalculBalance.nameMember = membre.name;
+        this.getAccountInLocalStorage.accounts.forEach(amount => {
+              if (amount.user === membre.name){
+                this.CalculBalance.totalAmount += amount.amount;
+              }
+            });
+            tableauOfAllUser.push(this.CalculBalance);
+            this.CalculBalance = {
+              nameMember:'',
+              totalAmount:0,
+            };
+        });
+        return tableauOfAllUser;
+    },
   }
   ,
   methods: {
@@ -78,7 +135,7 @@ export default {
         date: '',
         user: ''
       };
-    }
+    },
   }
 }
 </script>

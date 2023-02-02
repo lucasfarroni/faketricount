@@ -27,9 +27,9 @@
           <td>{{ account.description }}</td>
           <td>{{ account.date }}</td>
           <td>
-            <RouterLink v-if="account.membres.length > 0" :to="`/gestionDepense/${account.label}`">{{ account.label }} Gestion dépense</RouterLink>
+            <RouterLink v-if="account.membres.length > 0" :to="`/gestionDepense/${account.label}`">Compte :{{ account.label }} </RouterLink>
           </td>
-          <td><RouterLink :to="`/gestionMembreCompte/${account.label}`">{{ account.label }} Gestion membre</RouterLink></td>
+          <td><RouterLink :to="`/gestionMembreCompte/${account.label}`">Compte :{{ account.label }} </RouterLink></td>
           <td><button @click="removeCP(index)" class="btn btn-danger">Supprimer</button></td>
         </tr>
         </tbody>
@@ -47,6 +47,7 @@ export default {
         label: '',
         description: '',
         date : new Date(Date.now()).toLocaleDateString(),
+        total: 0,
         accounts: [],
         membres: []
       },
@@ -63,7 +64,8 @@ export default {
         description: '',
         date: '',
         accounts: [],
-        membres: []
+        membres: [],
+        total: 0
       };
     },
     removeCP(index) {
