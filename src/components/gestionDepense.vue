@@ -1,15 +1,13 @@
 <template>
   <div>
-    <h2>Montant total dépensé par le groupe : {{ updateTotal}}</h2>
+    <h2>Montant total dépensé par le groupe : </h2>
+    <h2 style="color: gold">{{updateTotal}} euros</h2>
     <form>
       <label for="name">Nom :</label>
       <input type="text" v-model="newExpense.name" id="name" placeholder="Entrez le nom de la dépense" required />
       <br />
       <label for="amount">Montant :</label>
       <input type="number" v-model="newExpense.amount" id="amount" placeholder="Entrez le montant de la dépense" required />
-      <br />
-      <label for="date">Date :</label>
-      <input type="date" v-model="newExpense.date" id="date" required />
       <br />
       <label for="user">Utilisateur :</label>
       <select v-model="newExpense.user">
@@ -19,6 +17,7 @@
       <br />
       <button @click.prevent="addExpense">Ajouter dépense</button>
     </form>
+    <h2 id="balance">Balance</h2>
     <table class="table">
       <thead>
         <tr>
@@ -33,7 +32,7 @@
         </tr>
       </tbody>
     </table>
-  <h2>historique</h2>
+  <h2 id="historique">historique</h2>
     <table class="table">
       <thead>
       <tr>
@@ -70,7 +69,7 @@ export default {
       newExpense: {
         name: '',
         amount: '',
-        date: '',
+        date : new Date(Date.now()).toLocaleDateString(),
         user: ''
       }
     }
@@ -139,3 +138,56 @@ export default {
   }
 }
 </script>
+<style>
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
+
+label {
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+input[type="text"],
+input[type="number"],
+select,
+input[type="date"] {
+  width: 30%;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.table {
+  width: 100%;
+  margin-top: 20px;
+}
+
+th,
+td {
+
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+#historique{
+  margin-top: 5%;
+  background-color: #cccccc;
+}
+#balance{
+  margin-top: 5%;
+  background-color: #cccccc;
+}
+</style>
