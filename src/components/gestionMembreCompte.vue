@@ -9,19 +9,32 @@
       <br />
       <button @click.prevent="addParticipant">Ajouter participant</button>
     </form>
-    <ul>
-      <li v-for="(participant, index) in getAccountInLocalStorage.membres" :key="participant.email + index">
-        {{ participant.name }} - {{ participant.email }}
-        <button @click="removeParticipant(index)">Supprimer</button>
-      </li>
-    </ul>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Email</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="(participant, index) in getAccountInLocalStorage.membres" :key="participant.email + index">
+        <td>{{ participant.name }}</td>
+        <td>{{ participant.email }}</td>
+        <td>
+          <button class="btn btn-danger" @click="removeParticipant(index)">Supprimer</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
-      accounts: JSON.parse(localStorage.getItem('CPS')) ,
+      accounts: JSON.parse(localStorage.getItem('CPS')) || [] ,
       newParticipant: {
         name: '',
         email: ''
@@ -54,3 +67,48 @@ export default {
   }
 }
 </script>
+<style>
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+label {
+  margin-bottom: 10px;
+}
+
+input[type="text"], input[type="email"] {
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 20px;
+  width: 300px;
+}
+
+button[type="submit"] {
+  background-color: blue;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.table {
+  margin-top: 20px;
+  width: 100%;
+  text-align: center;
+}
+
+.btn-danger {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+</style>

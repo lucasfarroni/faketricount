@@ -7,20 +7,34 @@
       <label for="description">Description :</label>
       <textarea v-model="newCP.description" id="description" placeholder="Description du compte partagé" required></textarea>
       <br />
-      <label for="date">Date de création :</label>
-      <input type="date" v-model="newCP.date" id="date" required />
-      <br />
       <button @click.prevent="createCP">Créer</button>
     </form>
-
-    <ul v-for="(account,index) in sharedAccount" :key="account.label+index">
-      <li >nom : {{ account.label }}</li>
-      <li>description : {{ account.description }}</li>
-      <li>date : {{ account.date }}</li>
-      <li><RouterLink :to="`/gestionDepense/${account.label}`">{{ account.label }} Gestion dep</RouterLink></li>
-      <li><RouterLink :to="`/gestionMembreCompte/${account.label}`">{{ account.label }} Gestion membre</RouterLink></li>
-      <li> <button @click="removeCP(index)">Supprimer</button></li>
-    </ul>
+    <div id="allAccount">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Description</th>
+          <th>Date</th>
+          <th>Gestion dépense</th>
+          <th>Gestion membre</th>
+          <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(account,index) in sharedAccount" :key="account.label" id="MyAccount">
+          <td>{{ account.label }}</td>
+          <td>{{ account.description }}</td>
+          <td>{{ account.date }}</td>
+          <td>
+            <RouterLink v-if="account.membres.length > 0" :to="`/gestionDepense/${account.label}`">{{ account.label }} Gestion dépense</RouterLink>
+          </td>
+          <td><RouterLink :to="`/gestionMembreCompte/${account.label}`">{{ account.label }} Gestion membre</RouterLink></td>
+          <td><button @click="removeCP(index)" class="btn btn-danger">Supprimer</button></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -28,32 +42,28 @@
 export default {
   data() {
     return {
-      sharedAccount: JSON.parse(localStorage.getItem('CPS')) ,
+      sharedAccount: JSON.parse(localStorage.getItem('CPS')) || [],
       newCP: {
+        label: '',
+        description: '',
+        date : new Date(Date.now()).toLocaleDateString(),
+        accounts: [],
+        membres: []
+      },
+    }
+  },
+  methods: {
+    createCP() {
+      // Enregistrer le nouveau CP dans le localstorage
+      this.sharedAccount.push(this.newCP);
+      localStorage.setItem('CPS', JSON.stringify(this.sharedAccount));
+      // Réinitialiser le formulaire
+      this.newCP = {
         label: '',
         description: '',
         date: '',
         accounts: [],
         membres: []
-      },
-    }
-
-  },
-
-  methods: {
-    createCP() {
-
-      // Enregistrer le nouveau CP dans le localstorage
-      let CPS = JSON.parse(localStorage.getItem('CPS')) || [];
-      CPS.push(this.newCP);
-      localStorage.setItem('CPS', JSON.stringify(CPS));
-      // Mettre à jour le tableau "sharedAccount"
-      this.sharedAccount = CPS;
-      // Réinitialiser le formulaire
-      this.newCP = {
-        label: '',
-        description: '',
-        date: ''
       };
     },
     removeCP(index) {
@@ -65,3 +75,59 @@ export default {
   }
 }
 </script>
+<style scoped>
+body {
+font-family: Arial, sans-serif;
+}
+
+form {
+display: flex;
+flex-direction: column;
+align-items: center;
+padding: 20px;
+}
+
+label {
+font-weight: bold;
+margin-bottom: 10px;
+}
+
+input[type="text"],
+textarea {
+width: 40%;
+padding: 10px;
+margin-bottom: 20px;
+border-radius: 5px;
+border: 1px solid #ccc;
+font-size: 14px;
+}
+
+button {
+background-color: #4CAF50;
+color: white;
+padding: 6px 12px;
+border-radius: 5px;
+border: none;
+cursor: pointer;
+font-size: 14px;
+}
+/*#allAccount{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}*/
+/*#MyAccount{
+  display: flex;
+}*/
+li {
+list-style: none;
+margin: 10px;
+}
+
+a {
+color: #4CAF50;
+text-decoration: none;
+}
+
+</style>

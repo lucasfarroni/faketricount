@@ -1,13 +1,9 @@
 <template>
   <div id="app">
-    <h1>App</h1>
-    <p>ceci est un test</p>
-
-    <router-link to="/CreateCompte">Compte</router-link>
-    <router-link to="/gestionMembreCompte">Membre</router-link>
-    <router-link to="/gestionDepense">Gestion Depense</router-link>
-    <router-link to="/BalanceDepense">Balance</router-link>
-
+    <h1>freeCount</h1>
+    <div id="routeLink">
+      <router-link to="/CreateCompte" id="crCompte">All Account</router-link>
+    </div>
     <router-view/>
   </div>
 </template>
@@ -31,6 +27,11 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
-
 }
+#routeLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 </style>

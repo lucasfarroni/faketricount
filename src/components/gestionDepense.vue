@@ -36,7 +36,6 @@ export default {
   data() {
     return {
       accounts: JSON.parse(localStorage.getItem('CPS')) || [],
-      selectedUser: '',
       newExpense: {
         name: '',
         amount: '',
@@ -46,25 +45,34 @@ export default {
     }
   },
   computed:{
+    /**
+     * Récupère le label de l'URL
+     */
     label(){
       return this.$route.params.label
     },
+    /**
+     * Récupère le compte dans le localStorage
+     */
       getAccountInLocalStorage(){
-
-        return this.accounts.find(account => account.label === this.label) || {};
+        return this.accounts.find(account => account.label === this.label) || [];
       }
     }
   ,
   methods: {
+    /**
+     * Ajoute une dépense
+     */
     addExpense() {
       let account = this.getAccountInLocalStorage;
 
       // Ajouter l'utilisateur sélectionné à la nouvelle dépense
+      //account = tableau du localStorage .accounts = tableau des dépenses . push = ajouter un élément au tableau
       account.accounts.push(this.newExpense);
       // Ajouter la nouvelle dépense à la liste
       //this.expenses.accounts.push(this.newExpense);
       // Enregistrer les dépenses dans le local storage
-      localStorage.setItem('CPS', JSON.stringify(account));
+      localStorage.setItem('CPS', JSON.stringify(this.accounts));
       // Réinitialiser le formulaire
       this.newExpense = {
         name: '',
