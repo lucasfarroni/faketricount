@@ -16,6 +16,9 @@
 
       <br />
       <button @click.prevent="addExpense">Ajouter dépense</button>
+      <RouterLink :to="`/gestionMembreCompte/${getAccountInLocalStorage.label}`" id="routeMembre"> Acceder aux membres du compte :
+        {{ getAccountInLocalStorage.label }}
+      </RouterLink>
     </form>
     <h2 id="balance">Balance</h2>
     <table class="table">
@@ -189,5 +192,18 @@ button {
 #balance{
   margin-top: 5%;
   background-color: #cccccc;
+}
+#routeMembre {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  text-decoration: none;
+  margin-top: 20px;
+  width: 300px;
+  text-align: center;
 }
 </style>

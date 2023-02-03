@@ -11,7 +11,7 @@
       <button id="btnSupMembre" @click.prevent="addParticipant">Ajouter participant</button>
     </form>
       <div id="accessToExpense" v-if= "getAccountInLocalStorage.membres.length > 0">
-        <RouterLink :to="`/gestionDepense/${getAccountInLocalStorage.label}`"> Acceder aux dépenses du compte :
+        <RouterLink :to="`/gestionDepense/${getAccountInLocalStorage.label}`" id="routeDepense"> Acceder aux dépenses du compte :
           {{ getAccountInLocalStorage.label }}
         </RouterLink>
       </div>
@@ -54,16 +54,26 @@ export default {
     getAccountInLocalStorage() {
       return this.accounts.find(account => account.label === this.label);
     },
+    checkName() {
+      return this.newParticipant.name === '' ;
+    },
+    checkEmail() {
+      return this.newParticipant.email === '';
+    },
   },
   methods: {
     addParticipant() {
-      let account = this.getAccountInLocalStorage;
-      account.membres.push(this.newParticipant);
-      localStorage.setItem('CPS', JSON.stringify(this.accounts));
-      this.newParticipant = {
-        name: '',
-        email: ''
-      };
+      if (this.checkName && this.checkEmail) {
+        alert('Veuillez remplir tous les champs');
+      } else {
+        let account = this.getAccountInLocalStorage;
+        account.membres.push(this.newParticipant);
+        localStorage.setItem('CPS', JSON.stringify(this.accounts));
+        this.newParticipant = {
+          name: '',
+          email: ''
+        };
+      }
     },
     removeParticipant(index) {
       let account = this.getAccountInLocalStorage;
@@ -119,5 +129,18 @@ input[type="text"], input[type="email"] {
 }
 #btnSup:hover {
   background-color:#bb2d3b ;
+}
+#routeDepense{
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  text-decoration: none;
+  margin-top: 20px;
+  width: 300px;
+  text-align: center;
 }
 </style>

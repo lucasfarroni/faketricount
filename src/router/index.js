@@ -3,15 +3,18 @@ import NotFound from "@/components/NotFound.vue";
 import CreateCompte from "@/components/CreateCompte";
 import gestionMembreCompte from "@/components/gestionMembreCompte";
 import gestionDepense from "@/components/gestionDepense";
-import BalanceDepense from "@/components/BalanceDepense";
+
 const routes = [
-    { name: 'CreateCompte', path: '/CreateCompte', component: CreateCompte },
-    { name : 'NotFound' , path : '/:pathMatch(.*)*', component: NotFound},
+    { name: 'CreateCompte', path: '/', component: CreateCompte },
     { name : 'gestionMembreCompte' , path : '/gestionMembreCompte', component: gestionMembreCompte},
     { name : 'gestionMembreCompte' , path : '/gestionMembreCompte/:label', component: gestionMembreCompte},
     { name : 'gestionDepense' , path : '/gestionDepense', component: gestionDepense},
     { name : 'gestionDepense' , path : '/gestionDepense/:label', component: gestionDepense},
-    { name :  'BalanceDepense' , path : '/BalanceDepense', component: BalanceDepense},
+
+
+
+    //error404
+    { name : 'NotFound' , path : '/:pathMatch(.*)*', component: NotFound},
 
 ]
 

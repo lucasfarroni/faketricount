@@ -2,7 +2,7 @@
   <div id="app">
     <h1>fakeTricount</h1>
 
-      <router-link to="/CreateCompte" id="crCompte">All Account</router-link>
+      <h3><router-link to="/" id="crCompte">All Account</router-link></h3>
 
     <router-view/>
   </div>

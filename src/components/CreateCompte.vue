@@ -53,21 +53,30 @@ export default {
       },
     }
   },
+  computed: {
+    checkLabel() {
+      return this.newCP.label === '';
+    },
+  },
   methods: {
     createCP() {
+      if (this.checkLabel) {
+        alert('Veuillez renseigner le libellé du compte partagé');
+      } else {
       // Enregistrer le nouveau CP dans le localstorage
-      this.sharedAccount.push(this.newCP);
-      localStorage.setItem('CPS', JSON.stringify(this.sharedAccount));
-      // Réinitialiser le formulaire
-      this.newCP = {
-        label: '',
-        description: '',
-        date: '',
-        accounts: [],
-        membres: [],
-        total: 0
-      };
-    },
+        this.sharedAccount.push(this.newCP);
+        localStorage.setItem('CPS', JSON.stringify(this.sharedAccount));
+        // Réinitialiser le formulaire
+        this.newCP = {
+          label: '',
+          description: '',
+          date: '',
+          accounts: [],
+          membres: [],
+          total: 0
+        };
+    }
+  },
     removeCP(index) {
       let CPS = JSON.parse(localStorage.getItem('CPS'));
       CPS.splice(index, 1);
