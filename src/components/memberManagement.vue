@@ -1,24 +1,24 @@
 <template>
   <div>
     <form>
-      <label for="name">Nom </label>
-      <input type="text" v-model="newParticipant.name" id="name" placeholder="Entrez le nom du participant" required/>
+      <label for="name">Name </label>
+      <input type="text" v-model="newParticipant.name" id="name" placeholder="Enter the name of the Member" required/>
       <br/>
       <label for="email">Email </label>
-      <input type="email" v-model="newParticipant.email" id="email" placeholder="Entrez l'email du participant"
-             required/>
+      <input type="email" v-model="newParticipant.email" id="email" placeholder="Enter the email of the Member" required/>
+
       <br/>
-      <button id="btnSupMembre" @click.prevent="addParticipant">Ajouter participant</button>
+      <button id="btnSupMembre" @click.prevent="addParticipant">Add the Member</button>
     </form>
       <div id="accessToExpense" v-if= "getAccountInLocalStorage.membres.length > 0">
-        <RouterLink :to="`/gestionDepense/${getAccountInLocalStorage.label}`" id="routeDepense"> Acceder aux dépenses du compte :
+        <RouterLink :to="`/expenseManagement/${getAccountInLocalStorage.label}`" id="routeDepense"> Access to the account expenses :
           {{ getAccountInLocalStorage.label }}
         </RouterLink>
       </div>
     <table class="table">
       <thead>
       <tr>
-        <th>Nom</th>
+        <th>Name</th>
         <th>Email</th>
         <th>Action</th>
       </tr>
@@ -28,7 +28,7 @@
         <td>{{ participant.name }}</td>
         <td>{{ participant.email }}</td>
         <td>
-          <button id="btnSup" class="btn btn-danger" @click="removeParticipant(index) ">Supprimer</button>
+          <button id="btnSup" class="btn btn-danger" @click="removeParticipant(index) ">Delete</button>
         </td>
       </tr>
       </tbody>
@@ -48,9 +48,15 @@ export default {
     }
   },
   computed: {
+    /**
+    *get the label in the Url
+     */
     label() {
       return this.$route.params.label
     },
+    /**
+     * get the good account in the local storage with the label in the Url
+     */
     getAccountInLocalStorage() {
       return this.accounts.find(account => account.label === this.label);
     },
@@ -62,9 +68,13 @@ export default {
     },
   },
   methods: {
+    /**
+     * add a new participant in the good account in the local storage
+     * participant is the Member in the shared account
+     */
     addParticipant() {
       if (this.checkName || this.checkEmail) {
-        alert('Veuillez remplir tous les champs');
+        alert('Please fill in all fields');
       } else {
         let account = this.getAccountInLocalStorage;
         account.membres.push(this.newParticipant);
@@ -75,6 +85,10 @@ export default {
         };
       }
     },
+    /**
+     * remove a participant in the good account in the local storage
+     * participant is the Member in the shared account
+     */
     removeParticipant(index) {
       let account = this.getAccountInLocalStorage;
       account.membres.splice(index, 1);

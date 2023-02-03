@@ -1,23 +1,23 @@
 <template>
   <div>
     <form>
-      <label for="label">Libellé :</label>
-      <input type="text" v-model="newCP.label" id="label" placeholder="Nom du compte partagé" required />
+      <label for="label">Label</label>
+      <input type="text" v-model="newSharedAccount.label" id="label" placeholder="Name of the shared account" required />
       <br />
       <label for="description">Description :</label>
-      <textarea v-model="newCP.description" id="description" placeholder="Description du compte partagé" required></textarea>
+      <textarea v-model="newSharedAccount.description" id="description" placeholder="Description of the shared account" required></textarea>
       <br />
-      <button @click.prevent="createCP">Créer</button>
+      <button @click.prevent="createNewSharedAccount">Create</button>
     </form>
     <div id="allAccount">
       <table class="table">
         <thead>
         <tr>
-          <th>Nom</th>
+          <th>Name</th>
           <th>Description</th>
           <th>Date</th>
-          <th>Gestion dépense</th>
-          <th>Gestion membre</th>
+          <th>Expense Management</th>
+          <th>Member Management </th>
           <th>Action</th>
         </tr>
         </thead>
@@ -27,10 +27,10 @@
           <td>{{ account.description }}</td>
           <td>{{ account.date }}</td>
           <td>
-            <RouterLink v-if="account.membres.length > 0" :to="`/gestionDepense/${account.label}`">Compte :{{ account.label }} </RouterLink>
+            <RouterLink v-if="account.membres.length > 0" :to="`/expenseManagement/${account.label}`">Account :{{ account.label }} </RouterLink>
           </td>
-          <td><RouterLink :to="`/gestionMembreCompte/${account.label}`">Compte :{{ account.label }} </RouterLink></td>
-          <td><button @click="removeCP(index)" class="btn btn-danger">Supprimer</button></td>
+          <td><RouterLink :to="`/memberManagement/${account.label}`">Account :{{ account.label }} </RouterLink></td>
+          <td><button @click="removeSharedAccount(index)" class="btn btn-danger">Delete</button></td>
         </tr>
         </tbody>
       </table>
@@ -43,7 +43,10 @@ export default {
   data() {
     return {
       sharedAccount: JSON.parse(localStorage.getItem('CPS')) || [],
-      newCP: {
+      /**
+       * object newSharedAccount with label and description properties to create a new shared account
+       */
+      newSharedAccount: {
         label: '',
         description: '',
         date : new Date(Date.now()).toLocaleDateString(),
@@ -54,20 +57,27 @@ export default {
     }
   },
   computed: {
+    /**
+     * Check if the label is empty
+     * @returns {boolean}
+     */
     checkLabel() {
-      return this.newCP.label === '';
+      return this.newSharedAccount.label === '';
     },
   },
   methods: {
-    createCP() {
+    /**
+     * Create a new shared account
+     */
+    createNewSharedAccount() {
       if (this.checkLabel) {
-        alert('Veuillez renseigner le libellé du compte partagé');
+        alert('Please enter the name of the shared account');
       } else {
-      // Enregistrer le nouveau CP dans le localstorage
-        this.sharedAccount.push(this.newCP);
+        // create a new shared account
+        this.sharedAccount.push(this.newSharedAccount);
         localStorage.setItem('CPS', JSON.stringify(this.sharedAccount));
-        // Réinitialiser le formulaire
-        this.newCP = {
+        // Reset the form
+        this.newSharedAccount = {
           label: '',
           description: '',
           date: '',
@@ -77,11 +87,16 @@ export default {
         };
     }
   },
-    removeCP(index) {
-      let CPS = JSON.parse(localStorage.getItem('CPS'));
-      CPS.splice(index, 1);
-      localStorage.setItem('CPS', JSON.stringify(CPS));
-      this.sharedAccount = CPS;
+    /**
+     * Remove a shared account
+     * @param index
+     */
+    removeSharedAccount(index) {
+      //get the shared account in the local storage and remove it
+      let account = JSON.parse(localStorage.getItem('CPS'));
+      account.splice(index, 1);
+      localStorage.setItem('CPS', JSON.stringify(account));//update the local storage
+      this.sharedAccount = account;
     }
   }
 }

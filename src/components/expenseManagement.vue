@@ -1,48 +1,52 @@
 <template>
   <div>
-    <h2>Montant total dépensé par le groupe : </h2>
-    <h2 style="color: gold">{{updateTotal}} euros</h2>
+    <h2>Total amount spent by the group : </h2>
+    <h2 style="color: gold">{{ updateTotal }} euros</h2>
     <form>
-      <label for="name">Nom :</label>
-      <input type="text" v-model="newExpense.name" id="name" placeholder="Entrez le nom de la dépense" required />
-      <br />
-      <label for="amount">Montant :</label>
-      <input type="number" v-model="newExpense.amount" id="amount" placeholder="Entrez le montant de la dépense" required />
-      <br />
-      <label for="user">Utilisateur :</label>
+      <label for="name">Name :</label>
+      <input type="text" v-model="newExpense.name" id="name" placeholder="Enter the name of the expenses" required/>
+      <br/>
+      <label for="amount">Amount :</label>
+      <input type="number" v-model="newExpense.amount" id="amount" placeholder="Enter the amount of the expense"
+             required/>
+      <br/>
+      <label for="user">Member :</label>
       <select v-model="newExpense.user">
         <option v-for="user in getAccountInLocalStorage.membres" :value="user.name" :key="user">{{ user.name }}</option>
       </select>
 
-      <br />
-      <button @click.prevent="addExpense">Ajouter dépense</button>
-      <RouterLink :to="`/gestionMembreCompte/${getAccountInLocalStorage.label}`" id="routeMembre"> Acceder aux membres du compte :
+      <br/>
+      <button @click.prevent="addExpense">Add expense</button>
+      <RouterLink :to="`/memberManagement/${getAccountInLocalStorage.label}`" id="routeMembre"> Access to account
+        members :
         {{ getAccountInLocalStorage.label }}
       </RouterLink>
     </form>
     <h2 id="balance">Balance</h2>
     <table class="table">
       <thead>
-        <tr>
-          <th>Nom</th>
-          <th>Montant</th>
-        </tr>
+      <tr>
+        <th>Name</th>
+        <th>Amount</th>
+      </tr>
       </thead>
       <tbody>
-        <tr v-for="(userBalance, index) in tableauOfUser" :key="userBalance.nameMember+ index">
-          <td>{{ userBalance.nameMember }}</td>
-          <td  :style="{color: updateTotal / getAccountInLocalStorage.membres.length > userBalance.totalAmount ? 'red' : 'green'}">{{ userBalance.totalAmount }}</td>
-        </tr>
+      <tr v-for="(userBalance, index) in tableauOfUser" :key="userBalance.nameMember+ index">
+        <td>{{ userBalance.nameMember }}</td>
+        <td :style="{color: updateTotal / getAccountInLocalStorage.membres.length > userBalance.totalAmount ? 'red' : 'green'}">
+          {{ userBalance.totalAmount }}
+        </td>
+      </tr>
       </tbody>
     </table>
-  <h2 id="historique">historique</h2>
+    <h2 id="historique">history</h2>
     <table class="table">
       <thead>
       <tr>
-        <th scope="col">Nom</th>
-        <th scope="col">Montant</th>
+        <th scope="col">Name</th>
+        <th scope="col">Amount</th>
         <th scope="col">Date</th>
-        <th scope="col">Ajouté par</th>
+        <th scope="col">added by</th>
       </tr>
       </thead>
       <tbody>
@@ -62,45 +66,61 @@
 export default {
   data() {
     return {
-      totalExpensesfriend: 0,
-      accounts: JSON.parse(localStorage.getItem('CPS')) || [],
+      accounts: JSON.parse(localStorage.getItem('CPS')) || [],//get the local storage
       tableauOfAllUser: [],
+      /**
+       * Calcul balance object get the total amount spent by each member
+       */
       CalculBalance: {
-        nameMember:'',
-        totalAmount:0,
+        nameMember: '',
+        totalAmount: 0,
       },
+      /**
+       * newExpense object get the new expense
+       */
       newExpense: {
         name: '',
         amount: '',
-        date : new Date(Date.now()).toLocaleDateString(),
+        date: new Date(Date.now()).toLocaleDateString(),
         user: ''
       }
     }
   },
-  computed:{
+  computed: {
     /**
-     * Récupère le label de l'URL
+     * get the label of the account
      */
-    label(){
+    label() {
       return this.$route.params.label
     },
     /**
-     * Récupère le compte dans le localStorage
+     * get the good account in the local storage with the label in the Url
      */
-    getAccountInLocalStorage(){
+    getAccountInLocalStorage() {
       return this.accounts.find(account => account.label === this.label) || [];
     },
-    checkMontant(){
+    /**
+     *check if the amount is superior of zero
+     */
+    checkMontant() {
       return this.newExpense.amount > 0
     },
-    checkName(){
+    /**
+     * check if the name is not empty
+     */
+    checkName() {
       return this.newExpense.name.length > 0
     },
-    checkUser(){
+    /**
+     * check if the user is not empty
+     */
+    checkUser() {
       return this.newExpense.user.length > 0
     },
-
-    updateTotal(){
+    /**
+     * update the total amount spent by the group
+     */
+    updateTotal() {
       let account = this.getAccountInLocalStorage;
       let total = this.getAccountInLocalStorage.total;
       account.accounts.forEach(expense => {
@@ -108,42 +128,41 @@ export default {
       });
       return total;
     },
-    tableauOfUser(){
+    /**
+     *function tableauOfUser get the total amount spent by each member and add it to the object CalculBalance
+     */
+    tableauOfUser() {
       let tableauOfAllUser = [];
       this.getAccountInLocalStorage.membres.forEach(membre => {
-            this.CalculBalance.nameMember = membre.name;
+        this.CalculBalance.nameMember = membre.name;
         this.getAccountInLocalStorage.accounts.forEach(amount => {
-              if (amount.user === membre.name){
-                this.CalculBalance.totalAmount += amount.amount;
-              }
-            });
-            tableauOfAllUser.push(this.CalculBalance);
-            this.CalculBalance = {
-              nameMember:'',
-              totalAmount:0,
-            };
+          if (amount.user === membre.name) {
+            this.CalculBalance.totalAmount += amount.amount;
+          }
         });
-        return tableauOfAllUser;
+        tableauOfAllUser.push(this.CalculBalance);
+        this.CalculBalance = {
+          nameMember: '',
+          totalAmount: 0,
+        };
+      });
+      return tableauOfAllUser;
     },
   }
   ,
   methods: {
     /**
-     * Ajoute une dépense
+     * Add expense
      */
     addExpense() {
       if (!this.checkMontant || !this.checkName || !this.checkUser) {
         alert('remplir les champs ou entrer un montant positif');
       } else {
         let account = this.getAccountInLocalStorage;
-        // Ajouter l'utilisateur sélectionné à la nouvelle dépense
-        //account = tableau du localStorage .accounts = tableau des dépenses . push = ajouter un élément au tableau
         account.accounts.push(this.newExpense);
-        // Ajouter la nouvelle dépense à la liste
-        //this.expenses.accounts.push(this.newExpense);
-        // Enregistrer les dépenses dans le local storage
+        // Add the new expense to the local storage
         localStorage.setItem('CPS', JSON.stringify(this.accounts));
-        // Réinitialiser le formulaire
+        // Reset the newExpense object
         this.newExpense = {
           name: '',
           amount: '',
@@ -199,14 +218,17 @@ button {
   border: none;
   cursor: pointer;
 }
-#historique{
+
+#historique {
   margin-top: 5%;
   background-color: #cccccc;
 }
-#balance{
+
+#balance {
   margin-top: 5%;
   background-color: #cccccc;
 }
+
 #routeMembre {
   background-color: #4CAF50;
   color: white;
