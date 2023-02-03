@@ -63,7 +63,7 @@ export default {
   },
   methods: {
     addParticipant() {
-      if (this.checkName && this.checkEmail) {
+      if (this.checkName || this.checkEmail) {
         alert('Veuillez remplir tous les champs');
       } else {
         let account = this.getAccountInLocalStorage;

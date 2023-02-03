@@ -90,6 +90,16 @@ export default {
     getAccountInLocalStorage(){
       return this.accounts.find(account => account.label === this.label) || [];
     },
+    checkMontant(){
+      return this.newExpense.amount > 0
+    },
+    checkName(){
+      return this.newExpense.name.length > 0
+    },
+    checkUser(){
+      return this.newExpense.user.length > 0
+    },
+
     updateTotal(){
       let account = this.getAccountInLocalStorage;
       let total = this.getAccountInLocalStorage.total;
@@ -122,22 +132,26 @@ export default {
      * Ajoute une dépense
      */
     addExpense() {
-      let account = this.getAccountInLocalStorage;
-      // Ajouter l'utilisateur sélectionné à la nouvelle dépense
-      //account = tableau du localStorage .accounts = tableau des dépenses . push = ajouter un élément au tableau
-      account.accounts.push(this.newExpense);
-      // Ajouter la nouvelle dépense à la liste
-      //this.expenses.accounts.push(this.newExpense);
-      // Enregistrer les dépenses dans le local storage
-      localStorage.setItem('CPS', JSON.stringify(this.accounts));
-      // Réinitialiser le formulaire
-      this.newExpense = {
-        name: '',
-        amount: '',
-        date: '',
-        user: ''
-      };
-    },
+      if (!this.checkMontant || !this.checkName || !this.checkUser) {
+        alert('remplir les champs ou entrer un montant positif');
+      } else {
+        let account = this.getAccountInLocalStorage;
+        // Ajouter l'utilisateur sélectionné à la nouvelle dépense
+        //account = tableau du localStorage .accounts = tableau des dépenses . push = ajouter un élément au tableau
+        account.accounts.push(this.newExpense);
+        // Ajouter la nouvelle dépense à la liste
+        //this.expenses.accounts.push(this.newExpense);
+        // Enregistrer les dépenses dans le local storage
+        localStorage.setItem('CPS', JSON.stringify(this.accounts));
+        // Réinitialiser le formulaire
+        this.newExpense = {
+          name: '',
+          amount: '',
+          date: '',
+          user: ''
+        };
+      }
+    }
   }
 }
 </script>
